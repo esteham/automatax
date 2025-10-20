@@ -10,6 +10,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Enums\Role;
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -29,6 +31,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'status',
     ];
 
     /**
@@ -57,11 +61,22 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected $casts =
+    [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'role' => Role::class,
+    ];
+
+    //Role Helpers
+    public function isAdmin(): bool     { return $this->role === Role::ADMIN; }
+    public function isTaxpayer(): bool  { return $this->role === Role::TAXPAYER; }
+    public function isAuditor(): bool   { return $this->role === Role::AUDITOR; }
+    public function isAccountant(): bool{ return $this->role === Role::ACCOUNTANT; }
+
+    public function taxpayerProfile()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasOne(TaxpayerProfile::class);
     }
+    
 }
