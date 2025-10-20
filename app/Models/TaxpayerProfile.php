@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TaxpayerProfile extends Model
 {
     protected $fillable = [
-        'user_id','full_name','father_name','mother_name','spouse_name','gender','date_of_birth',
+        'user_id','first_name','last_name','father_name','mother_name','spouse_name','gender','date_of_birth',
         'nid','tin','occupation','alt_phone',
         'present_address_line','present_division_id','present_district_id','present_upazila_id','present_union_id','present_post_code',
         'permanent_address_line','permanent_division_id','permanent_district_id','permanent_upazila_id','permanent_union_id','permanent_post_code',
@@ -24,5 +24,16 @@ class TaxpayerProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
+    public function getFullNameAttribute()
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    public function setFullNameAttribute($value)
+    {
+        $parts = explode(' ', $value, 2);
+        $this->first_name = $parts[0] ?? '';
+        $this->last_name = $parts[1] ?? '';
+    }
 }

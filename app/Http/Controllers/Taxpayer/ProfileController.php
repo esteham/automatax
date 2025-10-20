@@ -14,7 +14,7 @@ class ProfileController extends Controller
     {
         $profile = TaxpayerProfile::firstOrCreate(
             ['user_id' => $request->user()->id],
-            ['full_name' => $request->user()->name]
+            ['first_name' => explode(' ', $request->user()->name)[0], 'last_name' => explode(' ', $request->user()->name)[1] ?? '']
         );
 
         return Inertia::render('Dashboard/Taxpayer/Profile', [
@@ -25,7 +25,8 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'full_name' => ['required','string','max:255'],
+            'first_name' => ['required','string','max:255'],
+            'last_name' => ['nullable','string','max:255'],
             'father_name' => ['nullable','string','max:255'],
             'mother_name' => ['nullable','string','max:255'],
             'spouse_name' => ['nullable','string','max:255'],
