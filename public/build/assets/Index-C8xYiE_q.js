@@ -1,0 +1,1 @@
+import{e as o,a as t,o as a}from"./app-uYI9C4eD.js";const n={class:"p-4 text-center"},r={__name:"Index",setup(c){return console.log("Accountant Dashboard Loaded"),(s,e)=>(a(),o("div",n,[...e[0]||(e[0]=[t("h1",null,"Accountant Dashboard",-1),t("p",null,"Welcome to the Accountant Panel",-1)])]))}};export{r as default};
