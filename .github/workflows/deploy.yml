@@ -2,7 +2,7 @@ name: Deploy (Laravel + Inertia/Vue) to Hostinger
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: mbstring, intl, gd, zip
           tools: composer:v2
 
@@ -51,13 +51,13 @@ jobs:
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server:     ${{ secrets.FTP_SERVER }}      # e.g. 82.25.107.67 (কোনো 'ftp://' নয়)
-          username:   ${{ secrets.FTP_USERNAME }}    # e.g. u975049586
-          password:   ${{ secrets.FTP_PASSWORD }}
-          protocol:   ftps
-          port:       21
-          local-dir:  .
-          server-dir: ${{ secrets.FTP_TARGET }}      # e.g. public_html/tax/
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: .
+          server-dir: ${{ secrets.FTP_TARGET }}
           exclude: |
             **/.git*
             **/.github/**
