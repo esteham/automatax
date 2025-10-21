@@ -3,7 +3,8 @@ import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({ profile: Object });
 const form = useForm({
-    full_name: props.profile?.full_name ?? "",
+    first_name: props.profile?.first_name ?? "",
+    last_name: props.profile?.last_name ?? "",
     father_name: props.profile?.father_name ?? "",
     mother_name: props.profile?.mother_name ?? "",
     spouse_name: props.profile?.spouse_name ?? "",
@@ -34,9 +35,14 @@ function submit() {
 
         <div class="grid md:grid-cols-2 gap-4">
             <input
-                v-model="form.full_name"
+                v-model="form.first_name"
                 class="input"
-                placeholder="Full Name"
+                placeholder="First Name"
+            />
+            <input
+                v-model="form.last_name"
+                class="input"
+                placeholder="Last Name"
             />
             <input v-model="form.nid" class="input" placeholder="NID" />
             <input v-model="form.tin" class="input" placeholder="TIN" />

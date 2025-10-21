@@ -16,7 +16,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Role-aware dashboard
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 

@@ -70,6 +70,6 @@ class ProfileController extends Controller
 
         $profile->update($data);
 
-        return back()->with('success', 'Profile updated.');
+        return redirect()->route('taxpayer.profile.show')->with('success', 'Profile updated.');
     }
 }
