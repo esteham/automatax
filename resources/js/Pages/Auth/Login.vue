@@ -4,6 +4,8 @@ import { Head, Link, useForm } from "@inertiajs/vue3";
 import { Mail, Lock } from "lucide-vue-next";
 
 import Logo from "@/Assets/Logo/AuthLogo.png";
+import Navbar from "@/Pages/Partials/Navbar.vue";
+import Footer from "@/Pages/Partials/Footer.vue";
 
 defineProps({
     canResetPassword: Boolean,
@@ -31,12 +33,13 @@ const submit = () => {
 
 <template>
     <Head title="Log in" />
+    <Navbar />
 
     <div
-        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100 px-6"
+        class="flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100 px-6"
     >
         <div
-            class="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-indigo-100 animate-fade-in"
+            class="w-full max-w-md bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-8 my-20 border border-indigo-100 animate-fade-in"
         >
             <div class="text-center mb-6">
                 <img :src="Logo" alt="Logo" class="h-12 w-auto mx-auto mb-2" />
@@ -152,6 +155,7 @@ const submit = () => {
             </p>
         </div>
     </div>
+    <Footer />
 </template>
 
 <style scoped>

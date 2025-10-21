@@ -3,6 +3,8 @@ import { ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 
 import Logo from "@/Assets/Logo/AuthLogo.png";
+import Navbar from "@/Pages/Partials/Navbar.vue";
+import Footer from "@/Pages/Partials/Footer.vue";
 
 const form = useForm({
     name: "",
@@ -24,6 +26,7 @@ const submit = () => {
 
 <template>
     <Head title="Register" />
+    <Navbar />
 
     <div
         class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100 px-6"
@@ -194,6 +197,7 @@ const submit = () => {
             </p>
         </div>
     </div>
+    <Footer />
 </template>
 
 <style scoped>
