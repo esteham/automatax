@@ -604,7 +604,8 @@ const stats = [
                 </div>
 
                 <p class="mt-6 text-sm text-blue-200/60">
-                    No credit card required • 14-day free trial • Cancel anytime
+                    No credit card required • 14-day free trial • Cancel
+                    anytimes
                 </p>
             </div>
         </section>
