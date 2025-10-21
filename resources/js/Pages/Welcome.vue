@@ -2,6 +2,7 @@
 import { Head, Link } from "@inertiajs/vue3";
 
 import Navbar from "@/Pages/Partials/Navbar.vue";
+import Footer from "@/Pages/Partials/Footer.vue";
 
 // --- Demo data (replace with props or server data) ---
 const queued = [
@@ -658,76 +659,7 @@ const stats = [
         </section>
 
         <!-- ====== MODERN FOOTER ====== -->
-        <footer
-            class="py-12 bg-gradient-to-br from-neutral-50 to-white border-t border-neutral-100"
-        >
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div
-                    class="flex flex-col lg:flex-row items-center justify-between gap-8"
-                >
-                    <!-- Brand -->
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="size-10 grid place-items-center rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold shadow-lg"
-                        >
-                            <svg
-                                class="size-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                                />
-                            </svg>
-                        </div>
-                        <div>
-                            <div
-                                class="font-bold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-                            >
-                                AutomateX
-                            </div>
-                            <div class="text-sm text-neutral-600">
-                                Modern tax automation
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Links -->
-                    <div class="flex items-center gap-8 text-sm">
-                        <Link
-                            href="/privacy"
-                            class="text-neutral-600 hover:text-blue-600 transition-colors"
-                            >Privacy</Link
-                        >
-                        <Link
-                            href="/terms"
-                            class="text-neutral-600 hover:text-blue-600 transition-colors"
-                            >Terms</Link
-                        >
-                        <a
-                            href="#"
-                            class="text-neutral-600 hover:text-blue-600 transition-colors"
-                            >Status</a
-                        >
-                        <a
-                            href="#"
-                            class="text-neutral-600 hover:text-blue-600 transition-colors"
-                            >Documentation</a
-                        >
-                    </div>
-
-                    <!-- Copyright -->
-                    <div class="text-sm text-neutral-500">
-                        © {{ new Date().getFullYear() }} AutomateX. All rights
-                        reserved.
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <Footer />
     </div>
 </template>
 
