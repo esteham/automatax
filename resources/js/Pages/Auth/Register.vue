@@ -1,6 +1,8 @@
 <script setup>
+import { ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
+
+import Logo from "@/Assets/Logo/AuthLogo.png";
 
 const form = useForm({
     name: "",
@@ -9,6 +11,9 @@ const form = useForm({
     password_confirmation: "",
     terms: false,
 });
+
+/*------Show password-------*/
+const showPassword = ref(false);
 
 const submit = () => {
     form.post(route("register"), {
@@ -27,6 +32,7 @@ const submit = () => {
             class="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-indigo-100 animate-fade-in"
         >
             <div class="text-center mb-6">
+                <img :src="Logo" alt="Logo" class="h-12 w-auto mx-auto mb-2" />
                 <h2 class="text-2xl font-bold text-gray-800">Create Account</h2>
                 <p class="text-gray-500 text-sm">
                     Join us and start your journey
@@ -81,21 +87,23 @@ const submit = () => {
                     </p>
                 </div>
 
-                <div>
+                <div class="relative mt-4">
                     <label
                         for="password"
                         class="block text-sm font-medium text-gray-700 mb-1"
                         >Password</label
                     >
+
                     <input
                         id="password"
                         v-model="form.password"
-                        type="password"
+                        :type="showPassword ? 'text' : 'password'"
                         placeholder="••••••••"
-                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                        class="pl-4 pr-16 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                         required
                         autocomplete="new-password"
                     />
+
                     <p
                         v-if="form.errors.password"
                         class="text-sm text-red-600 mt-1"
@@ -104,7 +112,7 @@ const submit = () => {
                     </p>
                 </div>
 
-                <div>
+                <div class="relative mt-4">
                     <label
                         for="password_confirmation"
                         class="block text-sm font-medium text-gray-700 mb-1"
@@ -113,12 +121,20 @@ const submit = () => {
                     <input
                         id="password_confirmation"
                         v-model="form.password_confirmation"
-                        type="password"
+                        :type="showPassword ? 'text' : 'password'"
                         placeholder="••••••••"
                         class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                         required
                         autocomplete="new-password"
                     />
+                    <!-- Toggle button inside input -->
+                    <button
+                        type="button"
+                        @click="showPassword = !showPassword"
+                        class="absolute right-3 top-2/3 -translate-y-1/2 text-sm text-gray-500 hover:text-gray-700"
+                    >
+                        {{ showPassword ? "Hide" : "Show" }}
+                    </button>
                     <p
                         v-if="form.errors.password_confirmation"
                         class="text-sm text-red-600 mt-1"

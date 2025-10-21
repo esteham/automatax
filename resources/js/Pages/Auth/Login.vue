@@ -1,11 +1,17 @@
 <script setup>
+import { ref } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import { Mail, Lock } from "lucide-vue-next";
+
+import Logo from "@/Assets/Logo/AuthLogo.png";
 
 defineProps({
     canResetPassword: Boolean,
     status: String,
 });
+
+/*------Show password-------*/
+const showPassword = ref(false);
 
 const form = useForm({
     email: "",
@@ -33,11 +39,7 @@ const submit = () => {
             class="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-indigo-100 animate-fade-in"
         >
             <div class="text-center mb-6">
-                <img
-                    src="/logo.svg"
-                    alt="Logo"
-                    class="h-12 w-auto mx-auto mb-2"
-                />
+                <img :src="Logo" alt="Logo" class="h-12 w-auto mx-auto mb-2" />
                 <h2 class="text-2xl font-bold text-gray-800">Welcome Back</h2>
                 <p class="text-gray-500 text-sm">Sign in to your account</p>
             </div>
@@ -83,12 +85,20 @@ const submit = () => {
                         />
                         <input
                             id="password"
+                            :type="showPassword ? 'text' : 'password'"
                             v-model="form.password"
-                            type="password"
                             placeholder="••••••••"
                             class="pl-10 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
                             required
                         />
+                        <!-- Toggle button-->
+                        <button
+                            type="button"
+                            @click="showPassword = !showPassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+                        >
+                            {{ showPassword ? "Hide" : "Show" }}
+                        </button>
                     </div>
                     <p
                         v-if="form.errors.password"
