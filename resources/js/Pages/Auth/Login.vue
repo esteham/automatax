@@ -1,12 +1,6 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Mail, Lock } from "lucide-vue-next";
 
 defineProps({
     canResetPassword: Boolean,
@@ -14,17 +8,17 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     remember: false,
 });
 
 const submit = () => {
-    form.transform(data => ({
+    form.transform((data) => ({
         ...data,
-        remember: form.remember ? 'on' : '',
-    })).post(route('login'), {
-        onFinish: () => form.reset('password'),
+        remember: form.remember ? "on" : "",
+    })).post(route("login"), {
+        onFinish: () => form.reset("password"),
     });
 };
 </script>
@@ -32,59 +26,136 @@ const submit = () => {
 <template>
     <Head title="Log in" />
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
+    <div
+        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100 px-6"
+    >
+        <div
+            class="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-indigo-100 animate-fade-in"
+        >
+            <div class="text-center mb-6">
+                <img
+                    src="/logo.svg"
+                    alt="Logo"
+                    class="h-12 w-auto mx-auto mb-2"
+                />
+                <h2 class="text-2xl font-bold text-gray-800">Welcome Back</h2>
+                <p class="text-gray-500 text-sm">Sign in to your account</p>
+            </div>
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+            <form @submit.prevent="submit" class="space-y-5">
+                <div>
+                    <label
+                        for="email"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Email</label
+                    >
+                    <div class="relative">
+                        <Mail
+                            class="absolute left-3 top-3 h-5 w-5 text-gray-400 pointer-events-none"
+                        />
+                        <input
+                            id="email"
+                            v-model="form.email"
+                            type="email"
+                            placeholder="you@example.com"
+                            class="pl-10 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            required
+                            autofocus
+                        />
+                    </div>
+                    <p
+                        v-if="form.errors.email"
+                        class="text-sm text-red-600 mt-1"
+                    >
+                        {{ form.errors.email }}
+                    </p>
+                </div>
+
+                <div>
+                    <label
+                        for="password"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Password</label
+                    >
+                    <div class="relative">
+                        <Lock
+                            class="absolute left-3 top-3 h-5 w-5 text-gray-400 pointer-events-none"
+                        />
+                        <input
+                            id="password"
+                            v-model="form.password"
+                            type="password"
+                            placeholder="••••••••"
+                            class="pl-10 w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            required
+                        />
+                    </div>
+                    <p
+                        v-if="form.errors.password"
+                        class="text-sm text-red-600 mt-1"
+                    >
+                        {{ form.errors.password }}
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            v-model="form.remember"
+                            class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span class="text-gray-600">Remember me</span>
+                    </label>
+
+                    <Link
+                        v-if="canResetPassword"
+                        :href="route('password.request')"
+                        class="text-indigo-600 hover:text-indigo-500"
+                        >Forgot password?</Link
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    :disabled="form.processing"
+                >
+                    {{ form.processing ? "Signing in..." : "Sign In" }}
+                </button>
+
+                <div
+                    v-if="status"
+                    class="text-sm text-green-600 text-center mt-4"
+                >
+                    {{ status }}
+                </div>
+            </form>
+
+            <p class="text-center text-sm text-gray-500 mt-6">
+                Don’t have an account?
+                <Link
+                    href="/register"
+                    class="text-indigo-600 hover:text-indigo-500"
+                    >Sign up</Link
+                >
+            </p>
         </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+    </div>
 </template>
+
+<style scoped>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out both;
+}
+</style>

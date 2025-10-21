@@ -1,24 +1,18 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
     terms: false,
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+    form.post(route("register"), {
+        onFinish: () => form.reset("password", "password_confirmation"),
     });
 };
 </script>
@@ -26,87 +20,178 @@ const submit = () => {
 <template>
     <Head title="Register" />
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-                <InputError class="mt-2" :message="form.errors.name" />
+    <div
+        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100 px-6"
+    >
+        <div
+            class="w-full max-w-md bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-indigo-100 animate-fade-in"
+        >
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Create Account</h2>
+                <p class="text-gray-500 text-sm">
+                    Join us and start your journey
+                </p>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+            <form @submit.prevent="submit" class="space-y-5">
+                <div>
+                    <label
+                        for="name"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Name</label
+                    >
+                    <input
+                        id="name"
+                        v-model="form.name"
+                        type="text"
+                        placeholder="Your full name"
+                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                        required
+                        autofocus
+                        autocomplete="name"
+                    />
+                    <p
+                        v-if="form.errors.name"
+                        class="text-sm text-red-600 mt-1"
+                    >
+                        {{ form.errors.name }}
+                    </p>
+                </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+                <div>
+                    <label
+                        for="email"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Email</label
+                    >
+                    <input
+                        id="email"
+                        v-model="form.email"
+                        type="email"
+                        placeholder="you@example.com"
+                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                        required
+                        autocomplete="username"
+                    />
+                    <p
+                        v-if="form.errors.email"
+                        class="text-sm text-red-600 mt-1"
+                    >
+                        {{ form.errors.email }}
+                    </p>
+                </div>
 
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
+                <div>
+                    <label
+                        for="password"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Password</label
+                    >
+                    <input
+                        id="password"
+                        v-model="form.password"
+                        type="password"
+                        placeholder="••••••••"
+                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                        required
+                        autocomplete="new-password"
+                    />
+                    <p
+                        v-if="form.errors.password"
+                        class="text-sm text-red-600 mt-1"
+                    >
+                        {{ form.errors.password }}
+                    </p>
+                </div>
 
-            <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-                <InputLabel for="terms">
-                    <div class="flex items-center">
-                        <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
+                <div>
+                    <label
+                        for="password_confirmation"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Confirm Password</label
+                    >
+                    <input
+                        id="password_confirmation"
+                        v-model="form.password_confirmation"
+                        type="password"
+                        placeholder="••••••••"
+                        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                        required
+                        autocomplete="new-password"
+                    />
+                    <p
+                        v-if="form.errors.password_confirmation"
+                        class="text-sm text-red-600 mt-1"
+                    >
+                        {{ form.errors.password_confirmation }}
+                    </p>
+                </div>
 
-                        <div class="ms-2">
-                            I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Privacy Policy</a>
-                        </div>
-                    </div>
-                    <InputError class="mt-2" :message="form.errors.terms" />
-                </InputLabel>
-            </div>
+                <div
+                    v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature"
+                    class="flex items-start space-x-2"
+                >
+                    <input
+                        type="checkbox"
+                        v-model="form.terms"
+                        id="terms"
+                        class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mt-1"
+                        required
+                    />
+                    <label for="terms" class="text-sm text-gray-600">
+                        I agree to the
+                        <a
+                            :href="route('terms.show')"
+                            target="_blank"
+                            class="text-indigo-600 hover:text-indigo-500 underline"
+                            >Terms of Service</a
+                        >
+                        and
+                        <a
+                            :href="route('policy.show')"
+                            target="_blank"
+                            class="text-indigo-600 hover:text-indigo-500 underline"
+                            >Privacy Policy</a
+                        >.
+                    </label>
+                </div>
+                <p v-if="form.errors.terms" class="text-sm text-red-600 mt-1">
+                    {{ form.errors.terms }}
+                </p>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Already registered?
-                </Link>
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    :disabled="form.processing"
+                >
+                    {{ form.processing ? "Registering..." : "Register" }}
+                </button>
+            </form>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+            <p class="text-center text-sm text-gray-500 mt-6">
+                Already registered?
+                <Link
+                    href="/login"
+                    class="text-indigo-600 hover:text-indigo-500 font-medium"
+                    >Sign in</Link
+                >
+            </p>
+        </div>
+    </div>
 </template>
+
+<style scoped>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out both;
+}
+</style>
