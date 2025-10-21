@@ -2,7 +2,7 @@ name: Deploy (Laravel + Inertia/Vue) to Hostinger
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -12,18 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1) PHP/Composer: prod deps
+      # 0) Validate required secrets early
+      - name: Validate secrets
+        run: |
+          test -n "${{ secrets.FTP_SERVER }}"   || { echo "::error::Missing secret FTP_SERVER"; exit 1; }
+          test -n "${{ secrets.FTP_USERNAME }}" || { echo "::error::Missing secret FTP_USERNAME"; exit 1; }
+          test -n "${{ secrets.FTP_PASSWORD }}" || { echo "::error::Missing secret FTP_PASSWORD"; exit 1; }
+          test -n "${{ secrets.FTP_TARGET }}"   || { echo "::error::Missing secret FTP_TARGET (e.g. public_html/tax/)"; exit 1; }
+
+      # 1) PHP/Composer
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: '8.2'
           extensions: mbstring, intl, gd, zip
           tools: composer:v2
 
       - name: Install PHP deps (prod)
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
-      # 2) Node/Vite build -> public/build
+      # 2) Node/Vite
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -35,21 +43,21 @@ jobs:
           if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
           npm run build
 
-      # 3) Cleanup (optional)
+      # 3) Cleanup
       - name: Cleanup
         run: rm -rf node_modules tests
 
-      # 4) FTP Deploy (FTPS)
+      # 4) FTP Deploy
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          local-dir: .
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server:     ${{ secrets.FTP_SERVER }}      # e.g. 82.25.107.67 (কোনো 'ftp://' নয়)
+          username:   ${{ secrets.FTP_USERNAME }}    # e.g. u975049586
+          password:   ${{ secrets.FTP_PASSWORD }}
+          protocol:   ftps
+          port:       21
+          local-dir:  .
+          server-dir: ${{ secrets.FTP_TARGET }}      # e.g. public_html/tax/
           exclude: |
             **/.git*
             **/.github/**
