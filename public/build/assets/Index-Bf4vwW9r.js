@@ -1,1 +1,0 @@
-import{e as t,a as o,o as a}from"./app-uYI9C4eD.js";const r={class:"p-4 text-center"},d={__name:"Index",setup(s){return console.log("Auditor Dashboard Loaded"),(n,e)=>(a(),t("div",r,[...e[0]||(e[0]=[o("h1",null,"Auditor Dashboard",-1),o("p",null,"Welcome to the Auditor Panel",-1)])]))}};export{d as default};

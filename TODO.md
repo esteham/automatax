@@ -1,10 +1,16 @@
-# TODO: Fix Taxpayer Profile Page Field Mismatch
+# TODO: Add Sidebar to Admin Dashboard
 
-## Steps to Complete
+-   [x] Create Sidebar.vue component in resources/js/Pages/Dashboard/Admin/
+-   [x] Create SidebarLink.vue component in resources/js/Pages/Dashboard/Admin/
+-   [x] Create Overview.vue page component in resources/js/Pages/Dashboard/Admin/
+-   [x] Create Users.vue page component in resources/js/Pages/Dashboard/Admin/
+-   [x] Create Settings.vue page component in resources/js/Pages/Dashboard/Admin/
+-   [x] Update Index.vue to include sidebar layout and dynamic content loading
+-   [x] Test navigation and responsiveness
 
-- [x] Update Profile.vue component to use separate first_name and last_name fields instead of full_name
-  - [x] Modify form initialization to bind to first_name and last_name from props.profile
-  - [x] Update template inputs to have separate fields for first_name and last_name
-  - [x] Ensure form submission sends first_name and last_name correctly
+# TODO: Implement Role-Based Sidebar Links
 
-- [x] Test the profile page to ensure it loads without redirects and form submits successfully (skipped per user request)
+-   [x] Update DashboardController.php to redirect admin, auditor, and accountant to Admin/Index with role data
+-   [x] Modify Admin/Index.vue to accept and pass role prop to Sidebar
+-   [x] Update Sidebar.vue to filter links based on user role (admin: all, auditor: Overview+Users, accountant: Overview+Settings)
+-   [x] Test role-based access for different user types

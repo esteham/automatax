@@ -1,1 +1,0 @@
-import{e as t,a as o,o as a}from"./app-uYI9C4eD.js";const n={class:"p-4 text-center"},d={__name:"Index",setup(s){return console.log("Admin Dashboard Loaded"),(l,e)=>(a(),t("div",n,[...e[0]||(e[0]=[o("h1",null,"Admin Dashboard",-1),o("p",null,"Welcome to the Admin Panel",-1)])]))}};export{d as default};

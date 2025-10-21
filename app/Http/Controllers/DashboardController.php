@@ -14,10 +14,10 @@ class DashboardController extends Controller
         $role = $request->user()->role;
 
         return match ($role) {
-            Role::ADMIN      => Inertia::render('Dashboard/Admin/Index'),
+            Role::ADMIN      => Inertia::render('Dashboard/Admin/Index', ['role' => $role->value]),
             Role::TAXPAYER   => Inertia::render('Dashboard/Taxpayer/Index'),
-            Role::AUDITOR    => Inertia::render('Dashboard/Auditor/Index'),
-            Role::ACCOUNTANT => Inertia::render('Dashboard/Accountant/Index'),
+            Role::AUDITOR    => Inertia::render('Dashboard/Admin/Index', ['role' => $role->value]),
+            Role::ACCOUNTANT => Inertia::render('Dashboard/Admin/Index', ['role' => $role->value]),
             default          => Inertia::render('Dashboard/Taxpayer/Index'),
         };
 
