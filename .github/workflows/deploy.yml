@@ -1,7 +1,8 @@
 name: Deploy (Laravel + Inertia/Vue) to Hostinger
 
 on:
-  push: { branches: [ main ] }
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -15,13 +16,14 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          extensions: mbstring, intl, gd
+          php-version: "8.2"
+          extensions: mbstring, intl, gd, zip
+          tools: composer:v2
 
       - name: Install PHP deps (prod)
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
-      # 2) Node/Vite: build Inertia/Vue assets -> public/build
+      # 2) Node/Vite build -> public/build
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -30,26 +32,27 @@ jobs:
 
       - name: Install Node deps & Build
         run: |
-          npm ci
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
           npm run build
 
-      # 3) Cleanup dev-only stuff (ঐচ্ছিক)
+      # 3) Cleanup (optional)
       - name: Cleanup
-        run: rm -rf node_modules tests .github
+        run: rm -rf node_modules tests
 
-      # 4) FTP Deploy (vendor + public/build সহ পুরো প্রজেক্ট)
+      # 4) FTP Deploy (FTPS)
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server:   ${{ ftp://82.25.107.67 }}
-          username: ${{ u975049586 }}
-          password: ${{ Dipannita.6jet }}
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
           local-dir: .
-          server-dir: ${{ /public_html/tax/ }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
           exclude: |
             **/.git*
+            **/.github/**
             **/node_modules/**
             **/tests/**
             **/.env
