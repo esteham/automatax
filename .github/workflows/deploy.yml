@@ -80,6 +80,7 @@ jobs:
           protocol: ftps # explicit FTPS
           port: 21
           local-dir: ./
+          passive: true
           server-dir: ${{ secrets.FTP_TARGET }}
           exclude: |
             **/.git*

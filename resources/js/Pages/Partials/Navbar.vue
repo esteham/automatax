@@ -149,7 +149,10 @@ const logout = () => {
                                 </p>
                             </div>
                             <div class="py-1">
-                                <NavLink class="block px-4 py-2" href="/profile"
+                                <NavLink
+                                    class="block px-4 py-2"
+                                    href="/dashboard"
+                                    :active="$page.url.startsWith('/dashboard')"
                                     >Profile</NavLink
                                 >
                                 <NavLink
