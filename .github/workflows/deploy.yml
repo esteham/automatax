@@ -24,7 +24,7 @@ jobs:
           test -n "${{ secrets.FTP_PASSWORD }}" || { echo "::error::Missing secret FTP_PASSWORD"; exit 1; }
           test -n "${{ secrets.FTP_TARGET }}"   || { echo "::error::Missing secret FTP_TARGET (e.g. public_html/tax/)"; exit 1; }
 
-      # 1) PHP/Composer
+      # --- Build phase ---
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -43,7 +43,6 @@ jobs:
       - name: Install PHP deps (prod)
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
-      # 2) Node/Vite
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -55,22 +54,30 @@ jobs:
           if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
           npm run build
 
-      # 3) Cleanup before upload (keep repo small for FTP)
-      - name: Cleanup
+      - name: Cleanup before upload
+        shell: bash
         run: |
           rm -rf node_modules tests
-          # never upload transient caches
           rm -rf storage/framework/sessions/* storage/framework/cache/* storage/framework/views/* || true
 
-      # 4) FTPS (explicit, port 21) — primary path
+      # --- Preflight connectivity checks (explicit FTPS, port 21) ---
+      - name: DNS resolve + FTPS handshake (port 21)
+        shell: bash
+        run: |
+          echo "Resolving: ${{ secrets.FTP_SERVER }}"
+          getent hosts "${{ secrets.FTP_SERVER }}" || true
+          echo "FTPS check (STARTTLS over 21)..."
+          # Try STARTTLS for FTP (explicit FTPS)
+          timeout 8s bash -lc 'openssl s_client -starttls ftp -crlf -connect "${{ secrets.FTP_SERVER }}:21" </dev/null' || true
+
+      # --- Deploy (Explicit FTPS on 21) ---
       - name: Upload via FTPS (explicit:21)
-        id: ftps_explicit
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ secrets.FTP_SERVER }} # TIP: প্রয়োজনে DNS এড়াতে এখানে সরাসরি সার্ভারের IP দিন
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftps # explicit FTPS
           port: 21
           local-dir: ./
           server-dir: ${{ secrets.FTP_TARGET }}
@@ -89,37 +96,9 @@ jobs:
           max-retries: 3
           state-name: .ftp-deploy-sync-state.json
 
-      # 5) Fallback: FTPS (implicit, port 990) — runs only if step above failed (e.g., FIN mid-session)
-      - name: Upload via FTPS (implicit:990) — fallback
-        if: ${{ failure() && steps.ftps_explicit.outcome == 'failure' }}
-        id: ftps_implicit
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 990
-          local-dir: ./
-          server-dir: ${{ secrets.FTP_TARGET }}
-          exclude: |
-            **/.git*
-            **/.github/**
-            **/node_modules/**
-            **/tests/**
-            **/.env
-            storage/logs/*.log
-            storage/framework/sessions/**
-            storage/framework/cache/**
-            storage/framework/views/**
-          log-level: verbose
-          timeout: 600000
-          max-retries: 3
-          state-name: .ftp-deploy-sync-state.json
-
-      # 6) (Optional) Last-resort diagnostic plain FTP — uncomment ONLY to test routing/creds; re-comment after.
+      # (Diagnostic only) Plain FTP test — DO NOT enable permanently
       # - name: Upload via plain FTP (diagnostic ONLY)
-      #   if: ${{ failure() && (steps.ftps_explicit.outcome == 'failure' || steps.ftps_implicit.outcome == 'failure') }}
+      #   if: ${{ failure() }}
       #   uses: SamKirkland/FTP-Deploy-Action@v4.3.6
       #   with:
       #     server: ${{ secrets.FTP_SERVER }}
@@ -140,6 +119,6 @@ jobs:
       #       storage/framework/cache/**
       #       storage/framework/views/**
       #     log-level: verbose
-      #     timeout: 600000
+      #     timeout: 300000
       #     max-retries: 1
       #     state-name: .ftp-deploy-sync-state.json
