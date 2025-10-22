@@ -6,6 +6,7 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Taxpayer\ProfileController;
+use App\Http\Controllers\Taxpayer\TinApplicationController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -27,18 +28,19 @@ Route::middleware(['auth'])->group(function () {
 
     /*------ Auditor/Inspector -------*/
     Route::prefix('audit')->middleware('role:auditor_inspector')->group(function () {
-        // 
+        //
     });
 
     /*-------- Accountant -----------*/
     Route::prefix('accounts')->middleware('role:accountant')->group(function () {
-        // 
+        //
     });
 
     /*-------- Taxpayer area ---------*/
     Route::prefix('taxpayer')->middleware('role:taxpayer')->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->name('taxpayer.profile.show');
         Route::post('/profile', [ProfileController::class, 'update'])->name('taxpayer.profile.update');
+        Route::resource('tin-applications', TinApplicationController::class, ['as' => 'taxpayer']);
         //
     });
 

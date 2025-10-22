@@ -73,7 +73,7 @@ const icons = {
                     </Link>
 
                     <Link
-                        href="/applications"
+                        :href="route('taxpayer.tin-applications.create')"
                         class="group p-5 rounded-2xl border border-neutral-200 bg-white hover:shadow-md hover:border-neutral-300 transition-all"
                     >
                         <div
