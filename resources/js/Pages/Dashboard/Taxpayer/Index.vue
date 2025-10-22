@@ -80,7 +80,7 @@ const icons = {
                             class="inline-flex items-center justify-center h-10 w-10 rounded-xl bg-purple-50 text-purple-600 group-hover:scale-105 transition"
                             v-html="icons.apply"
                         />
-                        <h3 class="mt-3 font-semibold">Apply for Land Tax</h3>
+                        <h3 class="mt-3 font-semibold">Apply for Tin Number</h3>
                         <p class="mt-1 text-sm text-neutral-600">
                             Start a new application and track approval status.
                         </p>

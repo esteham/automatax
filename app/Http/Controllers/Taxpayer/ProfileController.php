@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TaxpayerProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class ProfileController extends Controller
@@ -70,6 +71,10 @@ class ProfileController extends Controller
 
         $profile->update($data);
 
-        return redirect()->route('taxpayer.profile.show')->with('success', 'Profile updated.');
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['message' => 'Profile updated successfully.']);
+        }
+
+        return redirect()->back(303)->with('success', 'Profile updated successfully.');
     }
 }

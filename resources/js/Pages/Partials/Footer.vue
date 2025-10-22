@@ -2,6 +2,8 @@
 import { Link } from "@inertiajs/vue3";
 
 import Logo from "@/Assets/Logo/AuthLogo.png";
+
+const brandTo = route("dashboard");
 </script>
 
 <template>
